@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Todos App</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+    <style>
+      .strike {
+        text-decoration: line-through;
+      }
+    </style>
+  </head>
+  <!-- <body> -->
+  <body onload="fetchTask()">
+    <div>
+      <form id="add-task" class="container-fluid add-task" style="width:600px">
+        <label for="todo">Add Tasks with jQuery</label>
+        <input
+          type="text"
+          id="new-task"
+          class="new-task form-control"
+          name="todo"
+        />
+
+        <br />
+        <label for="todo">Tasks Description</label>
+        <input
+          type="text"
+          id="task-description"
+          class="task-description form-control"
+          name="description"
+        />
+        <br />
+
+        <input
+          type="submit"
+          id="task-submit"
+          class="task-submit form-control btn btn-warning"
+          value="add the todo"
+        />
+      </form>
+      <br />
+
+      <form id="form-todo-list" class="container-fluid" style="width:600px">
+        <ul id="todo-list" class="todo-list"></ul>
+      </form>
+    </div>
+    <br /><br />
+    <!-- class method form -->
+    <div class="container" style="width: 600px;">
+      <h2>Todos with Class</h2>
+      <div class="jumbotron">
+        <form id="myForm">
+          <div class="form-group">
+            <input
+              class="form-control"
+              type="text"
+              placeholder="Task Name"
+              id="taskName"
+            />
+          </div>
+          <div class="form-group">
+            <input
+              class="form-control"
+              type="text"
+              placeholder="Task Description"
+              id="taskDescription"
+            />
+          </div>
+          <div class="form-group">
+            <button
+              class="btn btn-primary"
+              type="submit"
+              placeholder="Task Name"
+              id="submit"
+              onclick="saveTask()"
+            >
+              Save
+            </button>
+          </div>
+        </form>
+      </div>
+      <div class="row marketing">
+        <div class="col-lg-12">
+          <div id="taskResults"></div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer container-fluid" style="width:600px">
+      &copy; Copyright: Bea Blome
+    </footer>
+
+    <script
+      src="https://code.jquery.com/jquery-3.4.1.js"
+      integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+      integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      //Method 1: jQuery
+      function addTodoItem() {
+        let todoItem = $("#new-task").val();
+        $("#todo-list").append(
+          "<li style='list-style: none'><input type='button'" +
+            " name='todo-item-done'" +
+            " class='todo-item-done btn btn-danger'" +
+            " value='Completed'" +
+            "' /> " +
+            todoItem +
+            " <button class='todo-item-delete btn btn-dark'>" +
+            "Delete</button></li>" +
+            "<br />"
+        );
+
+        $("#new-task").val("");
+      }
+
+      function deleteTodoItem(e, item) {
+        e.preventDefault();
+        $(item)
+          .parent()
+          .fadeOut("slow", function() {
+            $(item)
+              .parent()
+              .remove();
+          });
+      }
+
+      function completeTodoItem() {
+        $(this)
+          .parent()
+          .toggleClass("strike");
+      }
+
+      $(function() {
+        $("#task-submit").on("click", function(e) {
+          e.preventDefault();
+          addTodoItem();
+        });
+
+        $("#todo-list").on("click", ".todo-item-delete", function(e) {
+          let item = this;
+          deleteTodoItem(e, item);
+        });
+
+        $(document).on("click", ".todo-item-done", completeTodoItem);
+      });
+
+      //Method 2 LocalStorage
+      function saveTask(e) {
+        var taskResults = document.getElementById("taskResults");
+        taskResults.innerHTML +=
+          `<div class="well"><h3>` + "here" + ` </h3></div>`;
+        console.log(taskResults);
+
+        //get form values
+        var taskName = document.getElementById("taskName").value;
+        console.log(taskName);
+
+        var taskDescription = document.getElementById("taskDescription").value;
+        console.log(taskDescription);
+
+        //create an object to store the variables
+        var tasks = {
+          name: taskName,
+          description: taskDescription
+        };
+        console.log(tasks);
+
+        if (localStorage.getItem("tasks") == null) {
+          var task = [];
+          task.push(tasks);
+          localStorage.setItem("task", JSON.stringify(task));
+        } else {
+          var myTask = localStorage.getItem("task", JSON.parse(myTask));
+          myTask.push(task);
+          // then reset the localStorage
+          localStorage.setItem("task", JSON.stringify(myTask));
+        }
+
+        e.preventDefault();
+      }
+
+      function fetchTask(i) {
+        //create an object to store the variables
+        var task = JSON.parse(localStorage.getItem("task"));
+        console.log(task);
+        //output
+        var taskResult = document.getElementById("taskResults");
+        console.log(taskResult);
+
+        for (var i = 0; i < task.length; i++) {
+          let name = task[i].name;
+          let description = task[i].description;
+
+          taskResult.innerHTML +=
+            `<div class="well"><h3>` +
+            "Task: " +
+            name +
+            " " +
+            "Task Description: " +
+            description +
+            ` </h3></div>`;
+        }
+      }
+    </script>
+    <!-- <script src="main.js"></script> -->
+  </body>
+</html>
